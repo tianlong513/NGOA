@@ -1,0 +1,51 @@
+####\u914D\u7F6Etomcat
+server:
+  port: 8080 #\u7AEF\u53E3
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    context-path: /oa
+spring:
+  datasource: #mysql\u914D\u7F6E
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/nanjing_oa?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource #\u963F\u91CCdruid\u8FDE\u63A5\u6C60\u9A71\u52A8\u914D\u7F6E\u4FE1\u606F
+    druid:
+      initial-size: 1   #\u521D\u59CB\u8FDE\u63A5\u6570
+      min-idle: 1   #\u6700\u5C0F\u8FDE\u63A5\u6570
+      max-active: 50 #\u6700\u5927\u8FDE\u63A5\u6570
+
+  servlet:
+    multipart:
+    #\u9650\u5236\u591A\u4E2A\u6587\u4EF6\u7684\u603B\u5927\u5C0F
+      max-request-size:  10MB
+      max-file-size: 10MB
+
+####mybatis-plus\u914D\u7F6E
+mybatis-plus:
+  mapper-locations: classpath:/mybatis/mapper/**Mapper.xml
+  type-aliases-package: org.oa.entity   #\u5B9E\u4F53\u7C7B\u626B\u63CF\uFF0C\u591A\u4E2Apackage\u7528","\u9694\u5F00
+  global-config:
+    db-config:
+      #\u4E3B\u952E\u7C7B\u578B  AUTO:"\u6570\u636E\u5E93ID\u81EA\u589E", INPUT:"\u7528\u6237\u8F93\u5165ID",ID_WORKER:"\u5168\u5C40\u552F\u4E00ID (\u6570\u5B57\u7C7B\u578B\u552F\u4E00ID)", UUID:"\u5168\u5C40\u552F\u4E00ID UUID";
+      id-type: id_worker_str
+      #\u5B57\u6BB5\u7B56\u7565 IGNORED:"\u5FFD\u7565\u5224\u65AD",NOT_NULL:"\u975E NULL \u5224\u65AD"),NOT_EMPTY:"\u975E\u7A7A\u5224\u65AD"
+      field-strategy: not_empty
+      #\u9A7C\u5CF0\u4E0B\u5212\u7EBF\u8F6C\u6362
+      column-underline: true
+      #\u6570\u636E\u5E93\u5927\u5199\u4E0B\u5212\u7EBF\u8F6C\u6362
+#      capital-mode: true
+      #\u903B\u8F91\u5220\u9664\u914D\u7F6E
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+      db-type: mysql
+    #\u5237\u65B0mapper \u8C03\u8BD5\u795E\u5668
+    refresh: true
+  # \u539F\u751F\u914D\u7F6E
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+#

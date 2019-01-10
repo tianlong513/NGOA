@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.oa.mapper.GoodsMapper">
+
+    <select id="goodsAll" resultMap="goodsOngoodsTyeeMap">
+     SELECT * FROM tb_goods where `delete`=1
+    </select>
+
+    <select id="getTbGoodsType" parameterType="int" resultType="org.oa.entity.TbGoodsType">
+        select * FROM  tb_goods_type WHERE id=#{id}
+    </select>
+
+    <select id="getByIdGoods" resultType="int">
+        SELECT COUNT(1) FROM tb_goods where `delete`=1 and id=#{id}
+    </select>
+
+    <resultMap id="goodsOngoodsTyeeMap" type="org.oa.entity.TbGoods">
+        <result column="goodstype_id" property="goodstypeId"/>
+        <association property="tbGoodsType" column="goodstype_id" select="getTbGoodsType"/>
+    </resultMap>
+
+
+    <!--修改物品信息-->
+    <update id="editGoods">
+        update
+        tb_goods
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tbGoods.name!=null">
+                name=#{tbGoods.name},
+            </if>
+            <if test="tbGoods.goodstypeId>=0">
+                goodstype_id=#{tbGoods.goodstypeId},
+            </if>
+            <if test="tbGoods.description!=null">
+                description=#{tbGoods.description},
+            </if>
+            <if test="tbGoods.number>=0">
+                number=#{tbGoods.number},
+            </if>
+            <if test="tbGoods.state!=null">
+                state=#{tbGoods.state},
+            </if>
+
+        </trim>
+        where id=#{tbGoods.id}
+    </update>
+
+
+    <!--删除数据库信息，假删除-->
+    <update id="removeFindByIdGoods">
+        UPDATE tb_goods
+        SET `delete` = 0
+        WHERE
+	     id = #{id}
+    </update>
+
+    <insert id="addGoods">
+        INSERT INTO tb_goods ( id, name, goodstype_id, description, number, state )
+        VALUES
+	      ( NULL, #{tbGoods.name}, #{tbGoods.goodstypeId}, #{tbGoods.description}, #{tbGoods.number}, #{tbGoods.state} )
+    </insert>
+</mapper>

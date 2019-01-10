@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.oa.mapper.ArchivesMapper">
+    <select id="getArchives" resultMap="getArchivesMap">
+        select tb_archives.*,tb_staff_on_job.job_id,tb_staff_on_job.id as 'sjid',tb_job.job_name from tb_archives
+        left join tb_staff_on_job on tb_archives.id = tb_staff_on_job.archives_id
+        LEFT join tb_job on tb_job.job_id=tb_staff_on_job.job_id
+        WHERE tb_archives.delete=1
+    </select>
+
+    <update id="removeArchives">
+        UPDATE tb_archives SET `delete`=0 where id=#{id}
+    </update>
+
+    <resultMap id="getArchivesMap" type="org.oa.entity.TbArchives">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="head_portrait" property="headPortrait"/>
+        <result column="sex" property="sex"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="diploma" property="diploma"/>
+        <result column="diploma_picture_url" property="diplomaPictureUrl"/>
+        <result column="resume_url" property="resumeUrl"/>
+        <result column="honor_url" property="honorUrl"/>
+        <result column="create_date" property="createDate"/>
+        <result column="rz_date" property="rzDate"/>
+        <collection property="tbStaffOnJobList" resultMap="getTbStaffOnJobMap"/>
+    </resultMap>
+    <resultMap id="getTbStaffOnJobMap" type="org.oa.entity.TbStaffOnJob">
+        <id column="sjid" property="id"/>
+        <result column="archives_id" property="archivesId"/>
+        <result column="job_id" property="jobId"/>
+        <collection property="tbJobs" resultMap="getJobMap"/>
+    </resultMap>
+    <resultMap id="getJobMap" type="org.oa.entity.TbJob">
+        <id column="job_id" property="jobId"/>
+        <result column="job_name" property="jobName"/>
+    </resultMap>
+</mapper>
